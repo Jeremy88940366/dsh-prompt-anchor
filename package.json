@@ -1,6 +1,6 @@
 {
   "name": "dsh-prompt-anchor",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "DSH 插件：提示词注入、装配改写与内核补丁漂移自检（个人维护分支，MIT）。",
   "type": "module",
   "main": "lib/index.js",
