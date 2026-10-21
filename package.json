@@ -1,7 +1,7 @@
 {
   "name": "dsh-prompt-anchor",
-  "version": "2.1.2",
-  "description": "DSH 插件：提示词注入、装配改写与内核补丁漂移自检（个人维护分支，MIT）。",
+  "version": "2.2.0",
+  "description": "DSH 插件：提示词注入、装配改写与内核补丁漂移自检。",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -28,7 +28,6 @@
     "scripts",
     "client.js",
     "cordis.patch.yml",
-    "screenshots.json",
     "README.md",
     "README.zh-CN.md",
     "LICENSE"
