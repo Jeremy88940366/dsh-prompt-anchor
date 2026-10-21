@@ -1,0 +1,4 @@
+node_modules/
+*.bak-cwdfix-*
+.DS_Store
+Thumbs.db
