@@ -82,7 +82,7 @@ if (!ok) {
 } else {
   if (!movedApp && fso.FolderExists(appDir)) log('move-app-failed');
   try {
-    var marker = fso.CreateTextFile(resources + '\\dsh-purge-reapply-asar', true);
+    var marker = fso.CreateTextFile(resources + '\\prompt-anchor-reapply-asar', true);
     marker.WriteLine('1');
     marker.Close();
     log('marker');
