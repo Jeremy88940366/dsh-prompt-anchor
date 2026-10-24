@@ -125,7 +125,7 @@
     instructionHint: true
 
 - id: redteam-tools
-  name: prompt-anchor/redteam/tools
+  name: dsh-prompt-anchor/redteam/tools
 
 - id: agent-instructions
   name: '@deepseek-ai/dsh-agent-instructions'
