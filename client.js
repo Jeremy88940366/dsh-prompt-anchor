@@ -1828,7 +1828,20 @@ body:not([data-ds-dark-theme]) .dshp-auth-ops button.primary{background:var(--ds
 			const desktopLikely = hostSurface === "desktop" || clientGuessSurface() === "desktop";
 			const sealedReady = !located && desktopLikely && !!(s && (s.asar_still_sealed || s.desktop_exe || s.desktop_install));
 			const patchesLost = !located && !!(s && s.patches_lost);
-			const tally = located ? tallyPatches(patchRowsOf(s)) : { applied: 0, pending: 0, unmatched: 0, skipped: 0, total: 0 };
+			// Prefer the server's per-patch numbers: the group list folds rows, so
+			// counting its groups here would show fewer "applied" than the rows the
+			// user can actually see ticked when they expand it.
+			const tally = located
+				? (Number.isFinite(s && s.patches_total) && s.patches_total > 0
+					? {
+						applied: Number(s.patches_applied) || 0,
+						pending: Number(s.patches_pending) || 0,
+						unmatched: 0,
+						skipped: Number(s.patches_skipped) || 0,
+						total: Number(s.patches_total) || 0,
+					}
+					: tallyPatches(patchRowsOf(s)))
+				: { applied: 0, pending: 0, unmatched: 0, skipped: 0, total: 0 };
 			const total = tally.total;
 			const applied = tally.applied;
 			const pct = located && total ? Math.round((applied / total) * 100) : 0;

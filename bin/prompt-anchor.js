@@ -24,11 +24,28 @@ function printStatus(state) {
   out.push(`  注入文件       ${state.override_path}`);
   out.push(`  注入状态       ${state.override_status}`);
   out.push("");
-  out.push(`  补丁 ${state.patches_applied}/${core.ALL_PATCHES.length} 已清洗, ${state.patches_pending} 待清洗`);
-  for (const p of core.ALL_PATCHES) {
-    const s = state.patch_status[p.id];
-    const mark = s === "applied" ? "✓" : s === "pending" ? "✗" : "·";
-    out.push(`    ${mark} [#${String(p.id).padEnd(2)}] ${p.name.padEnd(30)} ${p.layer}/${p.layer_en} — ${s}`);
+  // Without a host there is nothing to count against. Printing "0/0 … 82 不适用"
+  // read as "all 82 patches are unusable here", which is the opposite of what
+  // happened: the host root was never located, so no patch was ever looked at.
+  if (!state.ai_base) {
+    out.push("  补丁计数不可用：还没定位到宿主内核（见上面「插件根」一行）。");
+    out.push("  定位到之后再运行 --status 才能看到真实的清洗进度。");
+  } else {
+    // Denominator is the patches that apply to this host, not ALL_PATCHES: the
+    // desktop-only ones sit at "na" and counting them made the CLI print 70/82 while
+    // the panel printed 70/76 for the same tree. `na` gets its own count so nothing
+    // simply disappears from the tally.
+    const total = state.patches_total || 0;
+    const na = state.patches_na || 0;
+    out.push(`  补丁 ${state.patches_applied}/${total} 已清洗, ${state.patches_pending} 待清洗` +
+      (na > 0 ? `, ${na} 不适用` : ""));
+  }
+  if (state.ai_base) {
+    for (const p of core.ALL_PATCHES) {
+      const s = state.patch_status[p.id];
+      const mark = s === "applied" ? "✓" : s === "pending" ? "✗" : "·";
+      out.push(`    ${mark} [#${String(p.id).padEnd(2)}] ${p.name.padEnd(30)} ${p.layer}/${p.layer_en} — ${s}`);
+    }
   }
   out.push("");
   out.push(`  shim: dsh.cmd=${state.shim_cmd}  dsh.ps1=${state.shim_ps1}  dsh=${state.shim_bin}`);
